@@ -7,7 +7,10 @@ app.get('/departureBoards', (req, res) => {
     if (postcode) {
         busTimeRequest.getBusArrivalJSON(postcode).then((json) => {
             res.send(json);
-        }).catch((err) => console.log(err));
+        }).catch((err) => {
+            res.status(400);
+            res.send('Nothing to display');
+        });
     } else {
         res.send('Did not send postcode in query');
     }
