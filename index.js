@@ -7,7 +7,7 @@ const appKey = '4236304488967b5683897c8980725377';
 
 // Get LAT LON from POSTCODE
 // Prompt user
-let postcode = readlineSync.question('Enter a postcode: ');
+let postcode = readlineSync.question('\nEnter a postcode: ');
 
 request(`https://api.postcodes.io/postcodes/${postcode}`, function(error, response, body) {
     if (error) {
@@ -35,7 +35,6 @@ request(`https://api.postcodes.io/postcodes/${postcode}`, function(error, respon
         stopPointsAsJSON['stopPoints'].slice(0,2).forEach(function(stop) {
             stop['lineGroup'].forEach(function(directedStop) {
                 const stopId = directedStop['naptanIdReference'];
-                console.log(stopId);
                 const requestURL = `https://api.tfl.gov.uk/StopPoint/${stopId}/Arrivals?app_id=${appId}&app_key=${appKey}`;
 
                 // Get bus times from this stop
@@ -49,7 +48,7 @@ request(`https://api.postcodes.io/postcodes/${postcode}`, function(error, respon
                         console.log(`No bus data found for stop id ${stopId}`);
                         return;
                     } 
-
+                    console.log(`\nThe next 5 buses departing from ${stop['commonName']} are:`);
                     // Get first 5 buses and print their info
                     busTimeAsJSON.slice(0,5).forEach(function(bus) {
                         console.log(`${bus['expectedArrival']} ${bus['destinationName']}`);
