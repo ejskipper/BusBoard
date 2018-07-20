@@ -9,24 +9,35 @@ const appKey = '4236304488967b5683897c8980725377';
 // Prompt user
 let postcode = readlineSync.question('\nEnter a postcode: ');
 
-request(`https://api.postcodes.io/postcodes/${postcode}`, function(error, response, body) {
-    if (error) {
-        throw error;
-    }
+// create promise for postcode
+let postCodePromise = new Promise(function(resolve, reject) {  
+    // Request the postcode
+    // If get lat lon... proceed with lat lon
+    request(`https://api.postcodes.io/postcodes/${postcode}`, function(error, response, body) {
+        if (error) {
+            throw error;
+        }
+    
+        const postcodeInfoAsJSON = JSON.parse(body);
+    
+        // Handle user entering garbage postcode
+        if (postcodeInfoAsJSON['status'] === 404) {
+            reject('Invalid postcode');
+        }
+    
+        // Extract postcode lat lon
+        const latitude = postcodeInfoAsJSON['result']['latitude'];
+        const longitude = postcodeInfoAsJSON['result']['longitude'];
+        resolve({latitude, longitude});
+    });
+});
 
-    const postcodeInfoAsJSON = JSON.parse(body);
+postCodePromise.then((val) => (getStopPoints(val.latitude, val.longitude)),
+                     (err) => console.log(err));
 
-    // Handle user entering garbage postcode
-    if (postcodeInfoAsJSON['status'] === 404) {
-        console.log('Invalid postcode');
-        return;
-    }
-
-    // Extract postcode lat lon
-    const latitude = postcodeInfoAsJSON['result']['latitude'];
-    const longitude = postcodeInfoAsJSON['result']['longitude'];
+ function getStopPoints(latitude, longitude) {
     const radius = 1000; 
-    const busStopURL = `https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanOnstreetBusCoachStopPair&radius=${radius}&lat=${latitude}&lon=${longitude}`;
+    const busStopURL = `https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanOnstreetBusCoachStopPair&radius=${radius}&lat=${latitude}&lon=${longitude}`;   
 
     request(busStopURL, function(error, response, body) {
         const stopPointsAsJSON = JSON.parse(body);
@@ -57,6 +68,4 @@ request(`https://api.postcodes.io/postcodes/${postcode}`, function(error, respon
             });
         });
     });
-});
-
-
+}
