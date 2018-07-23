@@ -1,4 +1,5 @@
 const request = require('request-promise-native');
+const moment = require('moment');
 
 // API Credentials
 const appId = '4586bfa0';
@@ -44,7 +45,7 @@ function getBusArrivalJSON(postcode) {
         return Promise.resolve(busTimes);
     })
 
-    .catch((err) => console.log("error:", err.message));
+    .catch((err) => reject(err.message));
 }
 
 function buildBusTimesJSON(body) {
@@ -58,7 +59,8 @@ function buildBusTimesJSON(body) {
     let stopName = busTimeAsJSON[1]['stationName'];
     let direction = busTimeAsJSON[1]['direction'];
     busTimeAsJSON.slice(0,5).forEach(function(bus) {
-        buses.push({'time': bus['expectedArrival'],
+        const minutesUntil = moment(bus['expectedArrival']).fromNow();
+        buses.push({'time': minutesUntil,
                     'destination' : bus['destinationName']});
     });
 
