@@ -1,3 +1,4 @@
+
 function getBusTimes() {
     var xhttp = new XMLHttpRequest();
     console.log('call getBustimes');
@@ -14,6 +15,31 @@ function getBusTimes() {
         console.log(xhttp.status);
         console.log(xhttp.response);
         console.log(xhttp.responseText);
+        let busTimesAsJSON = JSON.parse(xhttp.responseText);
+
+        let busTimesHTML = busTimesAsJSON.map(stop => {
+            let stopName = stop.stopName;
+            let direction = stop.direction;
+            
+            let busTimes = stop.buses.map((bus) => {
+                return `<li>${bus.time} to ${bus.destination}</li>`;
+            }).join('');
+
+            console.log(busTimes);
+            
+
+            // <h3>Example stop 1</h3>
+            // <ul>
+            //     <li>2 minutes: 123 to Example Street</li>
+            //     <li>3 minutes: 456 to Fantasy Land</li>
+            // </ul>
+            return `<h3>${stopName}, ${direction}</h3>
+                    <ul>${busTimes}</ul>`;
+            
+        });
+        
+        let resultsHTML = `<h2>Results</h2>${busTimesHTML.join('')}`
+        document.getElementById('results').innerHTML = resultsHTML;
     }
     
     xhttp.send();

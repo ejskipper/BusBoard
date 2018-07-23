@@ -55,12 +55,16 @@ function buildBusTimesJSON(body) {
 
     let buses = [];
     // Get first 5 buses and print their info
+    let stopName = busTimeAsJSON[1]['stationName'];
+    let direction = busTimeAsJSON[1]['direction'];
     busTimeAsJSON.slice(0,5).forEach(function(bus) {
         buses.push({'time': bus['expectedArrival'],
                     'destination' : bus['destinationName']});
     });
 
-    return buses;;
+    return {'stopName' : stopName,
+            'direction' : direction,
+            'buses' : buses};
 }
 
 module.exports = {getBusArrivalJSON}
