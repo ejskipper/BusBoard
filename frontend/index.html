@@ -6,16 +6,30 @@
     <link rel="stylesheet" href="styles.css">
     <script src="departures.js"></script>
   </head>
+
   <body>
-        <a class= link href="./history.html">Learn about the history of buses!</a>
-    <h1>BusBoard</h1>
-    <form action='javascript:void(0)' onsubmit="getBusTimes(); setInterval(getBusTimes, 30000)">
-        Postcode:<br>
-        <input id='postcodeField' type="text" name="postcode">
-        <input type="submit" value="Submit">
-    </form>
-    <div id="results">
-        
+       
+    <div class=header>
+      <h1>BUS BOARD</h1>
+    </div>
+
+    <div class=nav>
+      <ul>
+        <li><a  href="./index.html">Home</a></li>
+        <li><a href="./history.html">Info</a></li>
+      </ul>
+    </div>
+
+    <div class= text>
+      <form action='javascript:void(0)' onsubmit="getBusTimes(); setInterval(getBusTimes, 30000)">
+          Postcode:<br>
+          <input id='postcodeField' type="text" name="postcode">
+          <input type="submit" value="Submit">
+      </form>
+
+      <div id="results">
+          
+      </div>
     </div>
   </body>
 </html>
