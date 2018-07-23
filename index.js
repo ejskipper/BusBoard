@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const busTimeRequest = require('./api-requests');
 
+app.use(express.static('frontend'));
 app.get('/departureBoards', (req, res) => {
     let postcode = req.query.postcode;
     if (postcode) {
