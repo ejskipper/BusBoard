@@ -26,9 +26,9 @@ function getBusTimes() {
                     return `<h3>${stop.stopName}, ${stop.direction}</h3>
                             <ul>${busTimes}</ul>`;
                 });
+                resultsHTML += busTimesHTML.join('');
             }
             
-            resultsHTML += busTimesHTML.join('');
         } else {
             // express may send a 400 Client Bad Data with an error message, return to client
             resultsHTML += xhttp.responseText;
