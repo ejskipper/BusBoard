@@ -9,6 +9,8 @@ app.use('/history', express.static('frontend/history.html'));
 // Internal request for bus data
 app.get('/departureBoards', (req, res) => {
     const postcode = req.query.postcode;
+    console.log(`Request made for postcode '${postcode}'`);
+    
     if (postcode) {
         busTimeRequest.getBusArrivalJSON(postcode).then((json) => {
             res.send(json);

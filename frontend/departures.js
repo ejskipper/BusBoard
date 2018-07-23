@@ -19,21 +19,18 @@ function getBusTimes() {
                 resultsHTML += 'No buses';
             } else {
                 var busTimesHTML = busTimesAsJSON.map(stop => {
-                    var stopName = stop.stopName;
-                    var direction = stop.direction;
-                    
                     var busTimes = stop.buses.map((bus) => {
                         return `<li>${bus.time} to ${bus.destination}</li>`;
                     }).join('');
                     
-                    return `<h3>${stopName}, ${direction}</h3>
+                    return `<h3>${stop.stopName}, ${stop.direction}</h3>
                             <ul>${busTimes}</ul>`;
-                    
                 });
             }
             
             resultsHTML += busTimesHTML.join('');
         } else {
+            // express may send a 400 Client Bad Data with an error message, return to client
             resultsHTML += xhttp.responseText;
         }
 

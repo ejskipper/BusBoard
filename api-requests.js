@@ -9,7 +9,7 @@ function getBusArrivalJSON(postcode) {
     
     return request(`https://api.postcodes.io/postcodes/${postcode}`).then(body => {
         // Handle user entering garbage postcode
-        let postcodeInfoAsJSON = JSON.parse(body);
+        const postcodeInfoAsJSON = JSON.parse(body);
         if (postcodeInfoAsJSON['status'] === 404) {
             throw 'Invalid postcode';
         }
@@ -27,7 +27,7 @@ function getBusArrivalJSON(postcode) {
         const stopPointsAsJSON = JSON.parse(body);
         let promises = [];
 
-        // Get first two closests bus stops
+        // Get data from first two closest bus stops
         stopPointsAsJSON['stopPoints'].slice(0,2).forEach(function(stop) {
             stop['lineGroup'].forEach(function(directedStop) {
                 const stopId = directedStop['naptanIdReference'];
@@ -37,11 +37,12 @@ function getBusArrivalJSON(postcode) {
                 promises.push(request(requestURL));
             });
         });
-        return Promise.all(promises);
+        return Promise.all(promises); // Turn an array of promises into a promise of an array
     })
 
     .then(bodies => {
-        let busTimes = bodies.map(body => buildBusTimesJSON(body));
+        // Format bus data as appropriate JSON
+        const busTimes = bodies.map(body => buildBusTimesJSON(body));
         return Promise.resolve(busTimes);
     })
 
@@ -53,8 +54,8 @@ function buildBusTimesJSON(body) {
 
     let buses = [];
     // Get first 5 buses and print their info
-    let stopName = busTimeAsJSON[1]['stationName'];
-    let direction = busTimeAsJSON[1]['direction'];
+    const stopName = busTimeAsJSON[1]['stationName'];
+    const direction = busTimeAsJSON[1]['direction'];
     busTimeAsJSON.slice(0,5).forEach(function(bus) {
         const minutesUntil = moment(bus['expectedArrival']).fromNow();
         buses.push({'time': minutesUntil,
