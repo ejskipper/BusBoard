@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const busTimeRequest = require('./api-requests');
 
+// Setup static directories
 app.use(express.static('frontend'));
 app.use('/history', express.static('frontend/history.html'));
+
+// Internal request for bus data
 app.get('/departureBoards', (req, res) => {
     let postcode = req.query.postcode;
     if (postcode) {
@@ -19,4 +22,4 @@ app.get('/departureBoards', (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('BusBoard app listening on port 3000'));

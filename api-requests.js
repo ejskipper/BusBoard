@@ -50,9 +50,6 @@ function getBusArrivalJSON(postcode) {
 
 function buildBusTimesJSON(body) {
     const busTimeAsJSON = JSON.parse(body);
-    if (busTimeAsJSON.length === 0) {
-        console.log(`No bus data found`);
-    }
 
     let buses = [];
     // Get first 5 buses and print their info
