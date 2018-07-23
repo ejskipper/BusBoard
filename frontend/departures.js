@@ -10,35 +10,34 @@ function getBusTimes() {
     
     xhttp.onload = function() {
         // Handle response here using e.g. xhttp.status, xhttp.response, xhttp.responseText
-
+        var resultsHTML = '<h2>Results</h2>';
+        
         if (xhttp.status === 200) {
-            let busTimesAsJSON = JSON.parse(xhttp.responseText);
+            var busTimesAsJSON = JSON.parse(xhttp.responseText);
 
             if (xhttp.responseText === '[]') {
-                // Give a message if there are no bus results
-                document.getElementById('results').innerHTML = '<h2>Results</h2>No buses';
-                return;
+                resultsHTML += 'No buses';
+            } else {
+                var busTimesHTML = busTimesAsJSON.map(stop => {
+                    var stopName = stop.stopName;
+                    var direction = stop.direction;
+                    
+                    var busTimes = stop.buses.map((bus) => {
+                        return `<li>${bus.time} to ${bus.destination}</li>`;
+                    }).join('');
+                    
+                    return `<h3>${stopName}, ${direction}</h3>
+                            <ul>${busTimes}</ul>`;
+                    
+                });
             }
-
-            let busTimesHTML = busTimesAsJSON.map(stop => {
-                let stopName = stop.stopName;
-                let direction = stop.direction;
-                
-                let busTimes = stop.buses.map((bus) => {
-                    return `<li>${bus.time} to ${bus.destination}</li>`;
-                }).join('');
-                
-                return `<h3>${stopName}, ${direction}</h3>
-                        <ul>${busTimes}</ul>`;
-                
-            });
             
-            let resultsHTML = `<h2>Results</h2>${busTimesHTML.join('')}`
-            document.getElementById('results').innerHTML = resultsHTML;
+            resultsHTML += busTimesHTML.join('');
         } else {
-            let resultsHTML = `<h2>Results</h2>${xhttp.responseText}`
-            document.getElementById('results').innerHTML = resultsHTML;
+            resultsHTML += xhttp.responseText;
         }
+
+        document.getElementById('results').innerHTML = resultsHTML;
     }
     
     xhttp.send();
