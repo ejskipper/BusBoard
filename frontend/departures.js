@@ -4,7 +4,7 @@ function getBusTimes() {
 
     var postcode = document.forms[0].elements["postcodeField"].value;
 
-    xhttp.open('GET', `http://localhost:3000/departureBoards?postcode=${postcode}`, true);
+    xhttp.open('GET', `/departureBoards?postcode=${postcode}`, true);
     
     xhttp.setRequestHeader('Content-Type', 'application/json');
     
