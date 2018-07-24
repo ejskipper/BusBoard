@@ -7,13 +7,11 @@ const appKey = '4236304488967b5683897c8980725377';
 
 function getBusArrivalJSON(postcode) {
     
-    return request(`https://api.postcodes.io/postcodes/${postcode}`).then(body => {
-        // Handle user entering garbage postcode
-        const postcodeInfoAsJSON = JSON.parse(body);
-        if (postcodeInfoAsJSON['status'] === 404) {
-            throw 'Invalid postcode';
-        }
+    return request(`https://api.postcodes.io/postcodes/${postcode}`)
 
+    .then(body => {
+        const postcodeInfoAsJSON = JSON.parse(body);
+        
         // Extract postcode lat lon
         const latitude = postcodeInfoAsJSON['result']['latitude'];
         const longitude = postcodeInfoAsJSON['result']['longitude'];
@@ -21,7 +19,16 @@ function getBusArrivalJSON(postcode) {
         const radius = 1000; 
         const busStopURL = `https://api.tfl.gov.uk/StopPoint?stopTypes=NaptanOnstreetBusCoachStopPair&radius=${radius}&lat=${latitude}&lon=${longitude}`;   
         return request(busStopURL);
-        })
+    })
+    
+    .catch(err => {
+        // Both 404 status rejections and invalid postcodes end up in this catch block
+        if (err.name === 'StatusCodeError') {
+            return Promise.reject('Invalid post code');
+        } else {
+            return Promise.reject('Couldn\'t reach api.postcodes.io');
+        }
+    })
 
     .then(body => {
         const stopPointsAsJSON = JSON.parse(body);
@@ -44,9 +51,7 @@ function getBusArrivalJSON(postcode) {
         // Format bus data as appropriate JSON
         const busTimes = bodies.map(body => buildBusTimesJSON(body));
         return Promise.resolve(busTimes);
-    })
-
-    .catch((err) => reject(err.message));
+    });
 }
 
 function buildBusTimesJSON(body) {

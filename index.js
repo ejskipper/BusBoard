@@ -12,11 +12,12 @@ app.get('/departureBoards', (req, res) => {
     console.log(`Request made for postcode '${postcode}'`);
     
     if (postcode) {
-        busTimeRequest.getBusArrivalJSON(postcode).then((json) => {
+        busTimeRequest.getBusArrivalJSON(postcode).then(
+            (json) => {
             res.send(json);
-        }).catch((err) => {
+        }, (err) => {
             res.status(400);
-            res.send('Invalid postcode');
+            res.send(err);
         });
     } else {
         res.status(400);
