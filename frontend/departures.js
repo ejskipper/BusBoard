@@ -1,8 +1,13 @@
 
-function getBusTimes() {
+function getBusTimesReturnPostcode(postcode) {
     var xhttp = new XMLHttpRequest();
 
-    var postcode = document.forms[0].elements["postcodeField"].value;
+    if (!postcode) {
+        // The first time this function is called
+        // ie. not from setInterval, there will be no argument,
+        // so get the postcode from the form
+        var postcode = document.forms[0].elements["postcodeField"].value;
+    }
 
     xhttp.open('GET', `/departureBoards?postcode=${postcode}`, true);
     
@@ -38,4 +43,6 @@ function getBusTimes() {
     }
     
     xhttp.send();
+
+    return postcode;
 }

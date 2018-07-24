@@ -21,7 +21,7 @@
     </div>
 
     <div class= text>
-      <form action='javascript:void(0)' onsubmit="getBusTimes(); setInterval(getBusTimes, 30000)">
+      <form action='javascript:void(0)' onsubmit="var postcode = getBusTimesReturnPostcode(); setInterval(getBusTimesReturnPostcode, 10000, postcode)">
           Postcode:<br>
           <input id='postcodeField' type="text" name="postcode">
           <input type="submit" value="Submit">
