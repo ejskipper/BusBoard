@@ -2,6 +2,10 @@ let id = 0;
 
 function doFormSubmit() {
     clearInterval(id);
+
+    // So that the every-30-second bus time updates continue using the same postcode on which they were originally called
+    // Save postcode as a variable, and pass to setInterval.
+    // clearInterval (above) will cancel the previous bus time update prescription when the form is next submitted
     var postcode = getBusTimesReturnPostcode();
     id = setInterval(getBusTimesReturnPostcode, 10000, postcode)
 }
