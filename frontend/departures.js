@@ -6,19 +6,13 @@ function doFormSubmit() {
     // So that the every-30-second bus time updates continue using the same postcode on which they were originally called
     // Save postcode as a variable, and pass to setInterval.
     // clearInterval (above) will cancel the previous bus time update prescription when the form is next submitted
-    var postcode = getBusTimesReturnPostcode();
-    id = setInterval(getBusTimesReturnPostcode, 10000, postcode)
+    var postcode = document.forms[0].elements["postcodeField"].value;
+    getBusTimes(postcode);
+    id = setInterval(() => getBusTimes(postcode), 10000)
 }
 
-function getBusTimesReturnPostcode(postcode) {
+function getBusTimes(postcode) {
     var xhttp = new XMLHttpRequest();
-
-    if (!postcode) {
-        // The first time this function is called
-        // ie. not from setInterval, there will be no argument,
-        // so get the postcode from the form
-        var postcode = document.forms[0].elements["postcodeField"].value;
-    }
 
     xhttp.open('GET', `/departureBoards?postcode=${postcode}`, true);
     
@@ -54,6 +48,4 @@ function getBusTimesReturnPostcode(postcode) {
     }
     
     xhttp.send();
-
-    return postcode;
 }
