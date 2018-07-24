@@ -1,3 +1,10 @@
+let id = 0;
+
+function doFormSubmit() {
+    clearInterval(id);
+    var postcode = getBusTimesReturnPostcode();
+    id = setInterval(getBusTimesReturnPostcode, 10000, postcode)
+}
 
 function getBusTimesReturnPostcode(postcode) {
     var xhttp = new XMLHttpRequest();
